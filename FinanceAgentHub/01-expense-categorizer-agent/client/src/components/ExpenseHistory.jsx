@@ -43,7 +43,7 @@ export default function ExpenseHistory({ history = [] }) {
                   {item.description && <div className="text-[11px] font-normal text-slate-500 truncate max-w-xs">{item.description}</div>}
                 </td>
                 <td className="px-4 py-3 font-mono text-emerald-400 font-medium">
-                  {`$${Number(item.amount).toFixed(2)}`}
+                  {`₹${Number(item.amount).toFixed(2)}`}
                 </td>
                 <td className="px-4 py-3">
                   <span className="px-2.5 py-1 rounded-md bg-cyan-950/60 border border-cyan-500/30 text-cyan-300 font-mono text-[11px]">

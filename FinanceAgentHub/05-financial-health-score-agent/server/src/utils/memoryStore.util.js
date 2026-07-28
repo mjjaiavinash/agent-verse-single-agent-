@@ -26,7 +26,7 @@ export const inMemoryHealthScores = [
     ],
     improvementPlan: [
       { step: 1, action: "Accelerate high-interest debt payoff to reduce monthly interest drag.", timeframe: "30 Days" },
-      { step: 2, action: "Increase liquid savings buffer from 4.4 to 6 months ($25,200).", timeframe: "90 Days" },
+      { step: 2, action: "Increase liquid savings buffer from 4.4 to 6 months (₹25,200).", timeframe: "90 Days" },
       { step: 3, action: "Automate bi-weekly index fund contributions.", timeframe: "180 Days" }
     ],
     createdAt: new Date(Date.now() - 3600000).toISOString(),

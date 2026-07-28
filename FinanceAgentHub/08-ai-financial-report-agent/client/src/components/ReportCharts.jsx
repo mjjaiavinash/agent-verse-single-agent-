@@ -33,11 +33,11 @@ export default function ReportCharts({ result }) {
           const heightPercent = Math.round((item.amount / maxVal) * 100);
           return (
             <div key={idx} className="flex flex-col items-center space-y-2 h-full justify-end">
-              <span className={`text-xs font-mono font-bold ${item.textColor}`}>${`${Number(item.amount).toLocaleString()}`}</span>
+              <span className={`text-xs font-mono font-bold ${item.textColor}`}>${`₹{Number(item.amount).toLocaleString()}`}</span>
               <div className="w-full bg-slate-800 rounded-t-xl overflow-hidden h-full flex items-end">
                 <div
                   className={`w-full bg-gradient-to-t ${item.color} rounded-t-xl transition-all duration-700` }
-                  style={{ height: `${heightPercent}%` }}
+                  style={{ height: `₹{heightPercent}%` }}
                 />
               </div>
               <span className="text-xs font-medium text-slate-400 font-mono text-center">{item.label}</span>

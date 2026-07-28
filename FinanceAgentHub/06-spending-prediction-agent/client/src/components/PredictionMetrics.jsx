@@ -16,7 +16,7 @@ export default function PredictionMetrics({ result }) {
           <DollarSign className="w-4 h-4 text-cyan-400" />
         </div>
         <div className="text-2xl font-bold text-slate-100 font-mono">
-          {`$${Number(predictedNextMonthSpending || 0).toFixed(2)}`}
+          {`₹${Number(predictedNextMonthSpending || 0).toFixed(2)}`}
         </div>
         <div className="text-[11px] text-slate-500">Forecasted Outflow</div>
       </div>
@@ -27,7 +27,7 @@ export default function PredictionMetrics({ result }) {
           <Cpu className="w-4 h-4 text-emerald-400" />
         </div>
         <div className="text-2xl font-bold text-emerald-400 font-mono">
-          {`${confPercent}%`}
+          {`₹{confPercent}%`}
         </div>
         <div className="text-[11px] text-slate-500">AI Predictive Accuracy</div>
       </div>
@@ -38,9 +38,9 @@ export default function PredictionMetrics({ result }) {
           <TrendingUp className="w-4 h-4 text-blue-400" />
         </div>
         <div className="text-2xl font-bold text-blue-400 font-mono">
-          {`$${Number(expectedMonthlySavings || 0).toFixed(0)}/mo`}
+          {`₹${Number(expectedMonthlySavings || 0).toFixed(0)}/mo`}
         </div>
-        <div className="text-[11px] text-slate-500">Proj. Annual: {`$${Number(expectedAnnualSavings || 0).toLocaleString()}`}</div>
+        <div className="text-[11px] text-slate-500">Proj. Annual: {`₹${Number(expectedAnnualSavings || 0).toLocaleString()}`}</div>
       </div>
 
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-1">

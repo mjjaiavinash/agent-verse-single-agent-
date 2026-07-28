@@ -33,12 +33,12 @@ export default function SubScoreBreakdown({ subScores }) {
                   <Icon className="w-4 h-4 text-cyan-400" />
                   <span>{item.label}</span>
                 </div>
-                <span className="font-mono text-cyan-400 font-bold">{`${item.score} / 100` }</span>
+                <span className="font-mono text-cyan-400 font-bold">{`₹{item.score} / 100` }</span>
               </div>
               <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all duration-700 ${item.color}`}
-                  style={{ width: `${item.score}%` }}
+                  style={{ width: `₹{item.score}%` }}
                 />
               </div>
             </div>

@@ -6,7 +6,7 @@ export default function ChatInput({ onSendMessage, loading }) {
   const [text, setText] = useState('');
 
   const { isListening, toggleListening } = useVoiceInput((transcript) => {
-    setText((prev) => (prev ? `${prev} ${transcript}` : transcript));
+    setText((prev) => (prev ? `₹{prev} ${transcript}` : transcript));
   });
 
   const handleSubmit = (e) => {

@@ -59,7 +59,7 @@ export default function Dashboard() {
           <div>
             <div className="text-xs text-slate-400 font-medium">Total Analyzed Outflow</div>
             <div className="text-3xl font-extrabold text-emerald-400 font-mono mt-1">
-              ${`${Number(result.totalSpent || 0).toFixed(2)}`}
+              ${`₹{Number(result.totalSpent || 0).toFixed(2)}`}
             </div>
           </div>
           <div className="flex items-center space-x-3 text-xs font-mono text-slate-400 bg-slate-950 p-3 rounded-xl border border-slate-800">

@@ -59,7 +59,7 @@ export default function SavingsInputForm({ onSubmit, loading }) {
         <div className="space-y-1.5">
           <label className="text-xs font-semibold text-slate-300 flex items-center space-x-1.5">
             <DollarSign className="w-3.5 h-3.5 text-rose-400" />
-            <span>Total Monthly Expenses ($) *</span>
+            <span>Total Monthly Expenses (₹) *</span>
           </label>
           <input
             type="number"
@@ -87,7 +87,7 @@ export default function SavingsInputForm({ onSubmit, loading }) {
               onClick={() => { setIncome(p.inc); setExpenses(p.exp); }}
               className="text-xs bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-emerald-500/40 text-slate-300 px-3 py-1.5 rounded-lg transition-all"
             >
-              {`${p.label} ($${p.inc} / $${p.exp})`}
+              {`₹{p.label} ($${p.inc} / $${p.exp})`}
             </button>
           ))}
         </div>

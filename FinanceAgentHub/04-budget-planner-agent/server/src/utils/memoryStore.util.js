@@ -23,8 +23,8 @@ export const inMemoryBudgets = [
       { period: 'Monthly Shopping Ceiling', limit: 400.00 },
     ],
     recommendations: [
-      "Cap Housing expenses at 30% ($1,800) to maintain high liquid flexibility.",
-      "Automate a 20% ($1,200) direct deposit split between high-yield savings and index funds.",
+      "Cap Housing expenses at 30% (₹1,800) to maintain high liquid flexibility.",
+      "Automate a 20% (₹1,200) direct deposit split between high-yield savings and index funds.",
       "Audit recurring streaming and SaaS subscriptions quarterly."
     ],
     createdAt: new Date(Date.now() - 3600000).toISOString(),

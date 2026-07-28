@@ -40,7 +40,7 @@ export class PersonalFinanceChatAgent {
 
 ### Recommended Steps:
 1. **Identify Fixed Costs**: Calculate monthly rent, groceries, and debt payments.
-2. **Set Initial Goal**: Reach $1,000 first as a cushion.
+2. **Set Initial Goal**: Reach ₹1,000 first as a cushion.
 3. **Automate Transfers**: Set up payday transfers to your HYSA.";
     }
     if (lower.includes('budget') || lower.includes('50/30/20')) {

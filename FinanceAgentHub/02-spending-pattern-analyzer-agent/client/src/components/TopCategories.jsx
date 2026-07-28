@@ -22,14 +22,14 @@ export default function TopCategories({ categories = [] }) {
             <div className="flex items-center justify-between text-xs">
               <span className="font-semibold text-slate-200">{cat.category}</span>
               <div className="flex items-center space-x-2 font-mono">
-                <span className="text-slate-400">${`${Number(cat.amount).toFixed(2)}`}</span>
-                <span className="text-emerald-400 font-bold">{`${cat.percentage}%`}</span>
+                <span className="text-slate-400">${`₹{Number(cat.amount).toFixed(2)}`}</span>
+                <span className="text-emerald-400 font-bold">{`₹{cat.percentage}%`}</span>
               </div>
             </div>
             <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
               <div
                 className="bg-gradient-to-r from-emerald-500 to-cyan-500 h-full rounded-full transition-all duration-500"
-                style={{ width: `${cat.percentage}%` }}
+                style={{ width: `₹{cat.percentage}%` }}
               />
             </div>
           </div>

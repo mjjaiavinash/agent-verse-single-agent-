@@ -26,7 +26,7 @@ export default function AllocationChart({ allocation }) {
               <ShieldCheck className="w-4 h-4" />
               <span>Needs (50%)</span>
             </span>
-            <span className="font-mono text-slate-300 font-bold">${`${Number(needs?.amount || 0).toFixed(0)}`}</span>
+            <span className="font-mono text-slate-300 font-bold">${`₹{Number(needs?.amount || 0).toFixed(0)}`}</span>
           </div>
           <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
             <div className="bg-blue-500 h-full rounded-full w-1/2" />
@@ -41,7 +41,7 @@ export default function AllocationChart({ allocation }) {
               <HeartHandshake className="w-4 h-4" />
               <span>Wants (30%)</span>
             </span>
-            <span className="font-mono text-slate-300 font-bold">${`${Number(wants?.amount || 0).toFixed(0)}`}</span>
+            <span className="font-mono text-slate-300 font-bold">${`₹{Number(wants?.amount || 0).toFixed(0)}`}</span>
           </div>
           <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
             <div className="bg-purple-500 h-full rounded-full w-[30%]" />
@@ -56,7 +56,7 @@ export default function AllocationChart({ allocation }) {
               <PiggyBank className="w-4 h-4" />
               <span>Savings (20%)</span>
             </span>
-            <span className="font-mono text-slate-300 font-bold">${`${Number(savings?.amount || 0).toFixed(0)}`}</span>
+            <span className="font-mono text-slate-300 font-bold">${`₹{Number(savings?.amount || 0).toFixed(0)}`}</span>
           </div>
           <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
             <div className="bg-emerald-500 h-full rounded-full w-[20%]" />

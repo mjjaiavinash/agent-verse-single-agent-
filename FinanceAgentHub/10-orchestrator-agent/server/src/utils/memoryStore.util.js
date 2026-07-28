@@ -1,7 +1,7 @@
 export const inMemoryOrchestrations = [
   {
     _id: 'mem_orch_1',
-    userQuery: 'Categorize my $85 Starbucks transaction, check my budget limits, and assess financial health.',
+    userQuery: 'Categorize my ₹85 Starbucks transaction, check my budget limits, and assess financial health.',
     selectedAgents: [
       '01-expense-categorizer-agent',
       '04-budget-planner-agent',
@@ -36,7 +36,7 @@ export const inMemoryOrchestrations = [
       { step: '3. Multi-Agent Synthesis', status: 'completed', latencyMs: 110 }
     ],
     totalExecutionTimeMs: 335,
-    finalSynthesizedResponse: "The $85 purchase at Starbucks was categorized as **Food & Dining** (98% confidence). Based on your monthly $1,800 discretionary allowance, this expenditure represents 4.7% of your dining cap without degrading your **Grade A (84/100)** Financial Health Score.",
+    finalSynthesizedResponse: "The ₹85 purchase at Starbucks was categorized as **Food & Dining** (98% confidence). Based on your monthly ₹1,800 discretionary allowance, this expenditure represents 4.7% of your dining cap without degrading your **Grade A (84/100)** Financial Health Score.",
     createdAt: new Date(Date.now() - 3600000).toISOString(),
   }
 ];

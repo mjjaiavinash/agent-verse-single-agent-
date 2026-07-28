@@ -49,7 +49,7 @@ export default function HealthInputForm({ onSubmit, loading }) {
         <div className="space-y-1.5">
           <label className="text-xs font-semibold text-slate-300 flex items-center space-x-1">
             <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Monthly Income ($)</span>
+            <span>Monthly Income (₹)</span>
           </label>
           <input
             type="number"
@@ -63,7 +63,7 @@ export default function HealthInputForm({ onSubmit, loading }) {
         <div className="space-y-1.5">
           <label className="text-xs font-semibold text-slate-300 flex items-center space-x-1">
             <DollarSign className="w-3.5 h-3.5 text-rose-400" />
-            <span>Monthly Expenses ($)</span>
+            <span>Monthly Expenses (₹)</span>
           </label>
           <input
             type="number"

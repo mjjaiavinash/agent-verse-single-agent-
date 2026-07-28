@@ -62,7 +62,7 @@ export default function GoalInputForm({ onSubmit, loading }) {
         <div className="space-y-1.5">
           <label className="text-xs font-semibold text-slate-300 flex items-center space-x-1">
             <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Target Amount ($) *</span>
+            <span>Target Amount (₹) *</span>
           </label>
           <input
             type="number"
@@ -79,7 +79,7 @@ export default function GoalInputForm({ onSubmit, loading }) {
         <div className="space-y-1.5">
           <label className="text-xs font-semibold text-slate-300 flex items-center space-x-1">
             <DollarSign className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Current Saved Amount ($)</span>
+            <span>Current Saved Amount (₹)</span>
           </label>
           <input
             type="number"
@@ -94,7 +94,7 @@ export default function GoalInputForm({ onSubmit, loading }) {
         <div className="space-y-1.5">
           <label className="text-xs font-semibold text-slate-300 flex items-center space-x-1">
             <DollarSign className="w-3.5 h-3.5 text-purple-400" />
-            <span>Monthly Contribution ($)</span>
+            <span>Monthly Contribution (₹)</span>
           </label>
           <input
             type="number"

@@ -4,13 +4,13 @@ import { TrendingUp, Sparkles, RefreshCw, Calendar, FileText } from 'lucide-reac
 export default function SpendingForm({ onSubmit, loading }) {
   const [timeframe, setTimeframe] = useState('Monthly');
   const [rawText, setRawText] = useState(
-    `Starbucks Coffee - $12.50
-Whole Foods Market - $145.00
-Uber Commute - $35.00
-Monthly Apartment Rent - $1400.00
-Amazon Electronics - $210.00
-Netflix Subscription - $19.99
-Shell Gas Station - $48.50`
+    `Starbucks Coffee - ₹12.50
+Whole Foods Market - ₹145.00
+Uber Commute - ₹35.00
+Monthly Apartment Rent - ₹1400.00
+Amazon Electronics - ₹210.00
+Netflix Subscription - ₹19.99
+Shell Gas Station - ₹48.50`
   );
 
   const handleSubmit = (e) => {

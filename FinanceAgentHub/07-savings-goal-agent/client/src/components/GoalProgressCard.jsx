@@ -29,19 +29,19 @@ export default function GoalProgressCard({ result }) {
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs font-mono">
           <span className="text-slate-400">Current Progress</span>
-          <span className="text-emerald-400 font-bold text-sm">{`${progressPercentage}%`}</span>
+          <span className="text-emerald-400 font-bold text-sm">{`₹{progressPercentage}%`}</span>
         </div>
 
         <div className="w-full bg-slate-950 h-4 rounded-full overflow-hidden p-0.5 border border-slate-800">
           <div
             className="bg-gradient-to-r from-emerald-500 to-cyan-400 h-full rounded-full transition-all duration-700 shadow-lg shadow-emerald-500/20"
-            style={{ width: `${progressPercentage}%` }}
+            style={{ width: `₹{progressPercentage}%` }}
           />
         </div>
 
         <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
-          <span>Saved: ${`${Number(currentSavings).toLocaleString()}`}</span>
-          <span>Target: ${`${Number(targetAmount).toLocaleString()}`}</span>
+          <span>Saved: ${`₹{Number(currentSavings).toLocaleString()}`}</span>
+          <span>Target: ${`₹{Number(targetAmount).toLocaleString()}`}</span>
         </div>
       </div>
 
@@ -53,7 +53,7 @@ export default function GoalProgressCard({ result }) {
             <span>Remaining Amount</span>
           </div>
           <div className="text-xl font-bold text-amber-400 font-mono">
-            ${`${Number(remainingAmount).toLocaleString()}`}
+            ${`₹{Number(remainingAmount).toLocaleString()}`}
           </div>
         </div>
 
@@ -63,7 +63,7 @@ export default function GoalProgressCard({ result }) {
             <span>Time to Completion</span>
           </div>
           <div className="text-xl font-bold text-cyan-400 font-mono">
-            {`${monthsToCompletion} Months`}
+            {`₹{monthsToCompletion} Months`}
           </div>
         </div>
 

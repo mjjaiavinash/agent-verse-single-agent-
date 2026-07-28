@@ -24,14 +24,14 @@ export default function ForecastChart({ futureTrends = [] }) {
           return (
             <div key={idx} className="flex flex-col items-center space-y-2 h-full justify-end">
               <div className="text-center font-mono space-y-0.5">
-                <div className="text-xs font-bold text-cyan-400">${`${Number(item.projectedSpending).toFixed(0)}`}</div>
-                <div className="text-[10px] text-slate-500">Savings: ${`${Number(item.projectedSavings).toFixed(0)}`}</div>
+                <div className="text-xs font-bold text-cyan-400">${`₹{Number(item.projectedSpending).toFixed(0)}`}</div>
+                <div className="text-[10px] text-slate-500">Savings: ${`₹{Number(item.projectedSavings).toFixed(0)}`}</div>
               </div>
 
               <div className="w-full bg-slate-800 rounded-t-xl overflow-hidden h-full flex items-end">
                 <div
                   className="w-full bg-gradient-to-t from-cyan-600 to-blue-500 rounded-t-xl transition-all duration-700 hover:from-cyan-400 hover:to-blue-400"
-                  style={{ height: `${heightPercent}%` }}
+                  style={{ height: `₹{heightPercent}%` }}
                 />
               </div>
 

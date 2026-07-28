@@ -3,11 +3,11 @@ import { Cpu, Send, Sparkles, RefreshCw, Layers } from 'lucide-react';
 
 export default function OrchestratorForm({ onSubmit, loading }) {
   const [query, setQuery] = useState(
-    'Categorize my $85 Starbucks transaction, check my budget limits, and assess my financial health score.'
+    'Categorize my ₹85 Starbucks transaction, check my budget limits, and assess my financial health score.'
   );
 
   const presets = [
-    'Categorize my $85 Starbucks transaction, check my budget limits, and assess financial health.',
+    'Categorize my ₹85 Starbucks transaction, check my budget limits, and assess financial health.',
     'Analyze my spending pattern history and generate personalized savings advice.',
     'Predict next month spending and build a 50/30/20 monthly budget plan.',
   ];

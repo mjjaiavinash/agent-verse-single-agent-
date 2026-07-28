@@ -23,11 +23,11 @@ export default function TrendsChart({ weeklyTrends = [] }) {
           const heightPercent = Math.round((trend.amount / maxAmount) * 100);
           return (
             <div key={idx} className="flex flex-col items-center space-y-2 h-full justify-end">
-              <span className="text-[11px] font-mono font-semibold text-cyan-400">${`${Number(trend.amount).toFixed(0)}`}</span>
+              <span className="text-[11px] font-mono font-semibold text-cyan-400">${`₹{Number(trend.amount).toFixed(0)}`}</span>
               <div className="w-full bg-slate-800 rounded-t-xl overflow-hidden h-full flex items-end">
                 <div
                   className="w-full bg-gradient-to-t from-cyan-600 to-blue-500 rounded-t-xl transition-all duration-700 hover:from-cyan-400 hover:to-blue-400"
-                  style={{ height: `${heightPercent}%` }}
+                  style={{ height: `₹{heightPercent}%` }}
                 />
               </div>
               <span className="text-xs font-medium text-slate-400 font-mono">{trend.week}</span>

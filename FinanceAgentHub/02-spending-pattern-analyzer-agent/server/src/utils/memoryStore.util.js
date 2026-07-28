@@ -28,7 +28,7 @@ export const inMemoryAnalyses = [
     aiInsights: [
       "Weekend spending (Friday & Saturday) constitutes 42% of discretionary outlays.",
       "Food & Dining expenditure experienced a 14% spike during Week 3.",
-      "Recommendation: Establish a Friday dining budget limit of $150 to preserve ~$400/month."
+      "Recommendation: Establish a Friday dining budget limit of ₹150 to preserve ~₹400/month."
     ],
     createdAt: new Date(Date.now() - 3600000).toISOString(),
   }

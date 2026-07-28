@@ -7,10 +7,10 @@ export default function ExpenseForm({ onSubmit, loading }) {
   const [description, setDescription] = useState('');
 
   const samplePresets = [
-    { name: 'Starbucks Coffee', amount: '6.50', desc: 'Iced caramel macchiato & blueberry muffin' },
-    { name: 'Uber Ride to Airport', amount: '42.50', desc: 'Morning commute via UberX to JFK' },
-    { name: 'Netflix Subscription', amount: '19.99', desc: 'Monthly 4K Ultra HD streaming plan' },
-    { name: 'Whole Foods Market', amount: '128.45', desc: 'Organic groceries, fresh produce, milk' },
+    { name: 'Starbucks Coffee', amount: '350', desc: 'Iced caramel macchiato & blueberry muffin' },
+    { name: 'Uber Ride to Airport', amount: '750', desc: 'Commute to Airport' },
+    { name: 'Netflix Plan', amount: '499', desc: 'Monthly Ultra HD streaming plan' },
+    { name: 'Grocery Supermarket', amount: '3500', desc: 'Monthly household grocery stock' },
   ];
 
   const handleSubmit = (e) => {
@@ -63,7 +63,7 @@ export default function ExpenseForm({ onSubmit, loading }) {
         <div className="space-y-1.5">
           <label className="text-xs font-semibold text-slate-300 flex items-center space-x-1.5">
             <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Expense Amount ($) *</span>
+            <span>Expense Amount (₹) *</span>
           </label>
           <input
             type="number"
@@ -105,7 +105,7 @@ export default function ExpenseForm({ onSubmit, loading }) {
               onClick={() => applyPreset(p)}
               className="text-xs bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-cyan-500/40 text-slate-300 px-3 py-1.5 rounded-lg transition-all"
             >
-              {`${p.name} ($${p.amount})`}
+              {`${p.name} (₹${p.amount})`}
             </button>
           ))}
         </div>

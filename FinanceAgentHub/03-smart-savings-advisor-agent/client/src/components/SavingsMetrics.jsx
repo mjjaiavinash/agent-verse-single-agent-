@@ -14,7 +14,7 @@ export default function SavingsMetrics({ result }) {
           <DollarSign className="w-4 h-4 text-emerald-400" />
         </div>
         <div className="text-2xl font-bold text-slate-100 font-mono">
-          {`$${Number(monthlyIncome - monthlyExpenses).toFixed(2)}`}
+          {`₹${Number(monthlyIncome - monthlyExpenses).toFixed(2)}`}
         </div>
         <div className="text-[11px] text-slate-500">Disposable Monthly Cash</div>
       </div>
@@ -25,7 +25,7 @@ export default function SavingsMetrics({ result }) {
           <TrendingUp className="w-4 h-4 text-cyan-400" />
         </div>
         <div className="text-2xl font-bold text-cyan-400 font-mono">
-          {`${currentSavingsRate}%`}
+          {`₹{currentSavingsRate}%`}
         </div>
         <div className="text-[11px] text-slate-500">Net Savings vs Income</div>
       </div>
@@ -36,7 +36,7 @@ export default function SavingsMetrics({ result }) {
           <PiggyBank className="w-4 h-4 text-teal-400" />
         </div>
         <div className="text-2xl font-bold text-emerald-400 font-mono">
-          {`$${Number(estimatedMonthlySavings).toFixed(0)}`}
+          {`₹${Number(estimatedMonthlySavings).toFixed(0)}`}
         </div>
         <div className="text-[11px] text-slate-500">Optimized Monthly Potential</div>
       </div>
@@ -47,7 +47,7 @@ export default function SavingsMetrics({ result }) {
           <ShieldCheck className="w-4 h-4 text-amber-400" />
         </div>
         <div className="text-2xl font-bold text-amber-400 font-mono">
-          {`$${Number(estimatedAnnualSavings).toLocaleString()}`}
+          {`₹${Number(estimatedAnnualSavings).toLocaleString()}`}
         </div>
         <div className="text-[11px] text-slate-500">12-Month Accumulated Capital</div>
       </div>

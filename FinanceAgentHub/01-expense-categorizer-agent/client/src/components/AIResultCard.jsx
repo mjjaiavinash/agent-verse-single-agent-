@@ -51,7 +51,7 @@ export default function AIResultCard({ result }) {
             <DollarSign className="w-3.5 h-3.5 text-emerald-400" />
             <span>Amount</span>
           </div>
-          <div className="text-base font-bold text-emerald-400">${`${Number(amount).toFixed(2)}`}</div>
+          <div className="text-base font-bold text-emerald-400">{`₹${Number(amount).toFixed(2)}`}</div>
         </div>
 
         <div className="bg-slate-950 p-4 rounded-xl border border-slate-800/80 space-y-1">
@@ -60,11 +60,11 @@ export default function AIResultCard({ result }) {
             <span>Confidence Score</span>
           </div>
           <div className="flex items-center space-x-2">
-            <span className="text-base font-bold text-blue-400 font-mono">{`${confidencePercent}%`}</span>
+            <span className="text-base font-bold text-blue-400 font-mono">{`₹{confidencePercent}%`}</span>
             <div className="flex-1 bg-slate-800 h-2 rounded-full overflow-hidden">
               <div
                 className="bg-blue-400 h-full rounded-full transition-all duration-500"
-                style={{ width: `${confidencePercent}%` }}
+                style={{ width: `₹{confidencePercent}%` }}
               />
             </div>
           </div>

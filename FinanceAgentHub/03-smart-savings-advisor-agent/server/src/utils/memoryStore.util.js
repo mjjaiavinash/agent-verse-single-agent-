@@ -24,12 +24,12 @@ export const inMemoryAdvice = [
       }
     ],
     recommendations: [
-      "Target a 35% savings rate baseline by trimming food & entertainment budgets by $200/month.",
-      "Set up automated recurring transfers of $450 to your investment portfolio on payday."
+      "Target a 35% savings rate baseline by trimming food & entertainment budgets by ₹200/month.",
+      "Set up automated recurring transfers of ₹450 to your investment portfolio on payday."
     ],
     warnings: [
       "Total fixed obligations represent 68% of monthly income, limiting emergency buffer.",
-      "Maintain at least $12,300 (3 months expenses) in liquid cash reserves."
+      "Maintain at least ₹12,300 (3 months expenses) in liquid cash reserves."
     ],
     createdAt: new Date(Date.now() - 3600000).toISOString(),
   }
