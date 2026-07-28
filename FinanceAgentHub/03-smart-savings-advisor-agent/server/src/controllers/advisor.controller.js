@@ -79,3 +79,5 @@ export const getHistory = async (req, res, next) => {
     next(error);
   }
 };
+
+export const generateAdvice = generateSavingsAdvice;
