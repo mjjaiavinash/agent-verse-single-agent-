@@ -124,7 +124,7 @@ export class OrchestratorAgent {
           { role: 'system', content: 'You are Master Orchestrator Agent. Synthesize JSON payloads into markdown.' },
           { role: 'user', content: `User Query: "${userQuery}", Payloads: ${JSON.stringify(agentResponses)}` }
         ],
-        model: 'llama3-8b-8192',
+        model: 'llama-3.1-8b-instant',
         temperature: 0.3,
         max_tokens: 800,
       });

@@ -21,7 +21,7 @@ export class FinancialHealthScoreAgent {
           { role: 'system', content: 'You are Financial Health Score Agent. Return JSON.' },
           { role: 'user', content: `Income: $${monthlyIncome}, Expenses: $${monthlyExpenses}, Debt: $${totalDebt}, Savings: $${totalSavings}` }
         ],
-        model: 'llama3-8b-8192',
+        model: 'llama-3.1-8b-instant',
         response_format: { type: 'json_object' }
       });
       return JSON.parse(completion.choices[0]?.message?.content);

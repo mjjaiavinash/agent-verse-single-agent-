@@ -29,7 +29,7 @@ export class SavingsGoalAgent {
           { role: 'system', content: 'You are Savings Goal Agent. Return JSON.' },
           { role: 'user', content: `Goal: "${goalName}", Target: $${targetAmount}, Current: $${currentSavings}, Contrib: $${monthlyContribution}` }
         ],
-        model: 'llama3-8b-8192',
+        model: 'llama-3.1-8b-instant',
         response_format: { type: 'json_object' }
       });
       return JSON.parse(completion.choices[0]?.message?.content);

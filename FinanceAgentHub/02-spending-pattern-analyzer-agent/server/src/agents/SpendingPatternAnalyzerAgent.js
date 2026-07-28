@@ -21,7 +21,7 @@ export class SpendingPatternAnalyzerAgent {
           { role: 'system', content: 'You are Spending Pattern Analyzer Agent. Return JSON.' },
           { role: 'user', content: `Analyze: Income $${monthlyIncome}, Expenses $${totalExpenses}` }
         ],
-        model: 'llama3-8b-8192',
+        model: 'llama-3.1-8b-instant',
         response_format: { type: 'json_object' }
       });
       return JSON.parse(completion.choices[0]?.message?.content);
