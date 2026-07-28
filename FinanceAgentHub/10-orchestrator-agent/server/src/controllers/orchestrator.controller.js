@@ -1,4 +1,4 @@
-import { orchestratorService } from '../services/orchestrator.service.js';
+import { orchestratorAgent } from '../agents/OrchestratorAgent.js';
 import { OrchestrationLog } from '../models/OrchestrationLog.js';
 import { getDBStatus } from '../config/db.config.js';
 import { inMemoryOrchestrations } from '../utils/memoryStore.util.js';
@@ -8,22 +8,21 @@ export const orchestrateRequest = async (req, res, next) => {
   try {
     const { userQuery } = req.body;
 
-    logger.info(`[Orchestrator Agent] Processing master query: "${userQuery}"`);
+    logger.info(`[Orchestrator Controller] Delegating master query to OrchestratorAgent`);
 
-    const resultPayload = await orchestratorService.executeOrchestration({ userQuery });
+    const agentResult = await orchestratorAgent.execute({ userQuery });
 
     const payload = {
       userQuery,
-      selectedAgents: resultPayload.selectedAgents,
-      agentResponses: resultPayload.agentResponses,
-      orchestrationTimeline: resultPayload.orchestrationTimeline,
-      totalExecutionTimeMs: resultPayload.totalExecutionTimeMs,
-      finalSynthesizedResponse: resultPayload.finalSynthesizedResponse,
+      selectedAgents: agentResult.selectedAgents,
+      agentResponses: agentResult.agentResponses,
+      orchestrationTimeline: agentResult.orchestrationTimeline,
+      totalExecutionTimeMs: agentResult.totalExecutionTimeMs,
+      finalSynthesizedResponse: agentResult.finalSynthesizedResponse,
       createdAt: new Date(),
     };
 
     let savedRecord = null;
-
     if (getDBStatus()) {
       try {
         savedRecord = await OrchestrationLog.create(payload);
@@ -33,10 +32,7 @@ export const orchestrateRequest = async (req, res, next) => {
     }
 
     if (!savedRecord) {
-      savedRecord = {
-        _id: 'mem_orch_' + Date.now(),
-        ...payload,
-      };
+      savedRecord = { _id: 'mem_' + Date.now(), ...payload };
       inMemoryOrchestrations.unshift(savedRecord);
     }
 
@@ -62,7 +58,7 @@ export const orchestrateRequest = async (req, res, next) => {
 
 export const checkAgentHealth = async (req, res, next) => {
   try {
-    const networkStatus = await orchestratorService.pingAgentsStatus();
+    const networkStatus = await orchestratorAgent.pingAgentsStatus();
     return res.status(200).json({
       agent: "Orchestrator Agent",
       status: "success",
@@ -77,7 +73,6 @@ export const checkAgentHealth = async (req, res, next) => {
 export const getHistory = async (req, res, next) => {
   try {
     let history = [];
-
     if (getDBStatus()) {
       try {
         history = await OrchestrationLog.find().sort({ createdAt: -1 }).limit(20);

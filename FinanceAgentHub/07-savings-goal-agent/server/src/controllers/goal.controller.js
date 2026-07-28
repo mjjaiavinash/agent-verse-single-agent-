@@ -1,4 +1,4 @@
-import { goalService } from '../services/goal.service.js';
+import { savingsGoalAgent } from '../agents/SavingsGoalAgent.js';
 import { SavingsGoal } from '../models/SavingsGoal.js';
 import { getDBStatus } from '../config/db.config.js';
 import { inMemoryGoals } from '../utils/memoryStore.util.js';
@@ -8,9 +8,9 @@ export const analyzeGoal = async (req, res, next) => {
   try {
     const { goalName, targetAmount, currentSavings, monthlyContribution } = req.body;
 
-    logger.info(`[Savings Goal Agent] Processing goal "${goalName}" (Target: $${targetAmount})`);
+    logger.info(`[Savings Goal Controller] Delegating analysis to SavingsGoalAgent`);
 
-    const goalOutput = await goalService.analyzeGoal({
+    const agentResult = await savingsGoalAgent.execute({
       goalName,
       targetAmount,
       currentSavings,
@@ -22,17 +22,16 @@ export const analyzeGoal = async (req, res, next) => {
       targetAmount,
       currentSavings,
       monthlyContribution,
-      progressPercentage: goalOutput.progressPercentage,
-      remainingAmount: goalOutput.remainingAmount,
-      monthsToCompletion: goalOutput.monthsToCompletion,
-      completionDate: goalOutput.completionDate,
-      milestones: goalOutput.milestones,
-      suggestions: goalOutput.suggestions,
+      progressPercentage: agentResult.progressPercentage,
+      remainingAmount: agentResult.remainingAmount,
+      monthsToCompletion: agentResult.monthsToCompletion,
+      completionDate: agentResult.completionDate,
+      milestones: agentResult.milestones,
+      suggestions: agentResult.suggestions,
       createdAt: new Date(),
     };
 
     let savedRecord = null;
-
     if (getDBStatus()) {
       try {
         savedRecord = await SavingsGoal.create(payload);
@@ -42,10 +41,7 @@ export const analyzeGoal = async (req, res, next) => {
     }
 
     if (!savedRecord) {
-      savedRecord = {
-        _id: 'mem_goal_' + Date.now(),
-        ...payload,
-      };
+      savedRecord = { _id: 'mem_' + Date.now(), ...payload };
       inMemoryGoals.unshift(savedRecord);
     }
 
@@ -76,7 +72,6 @@ export const analyzeGoal = async (req, res, next) => {
 export const getHistory = async (req, res, next) => {
   try {
     let history = [];
-
     if (getDBStatus()) {
       try {
         history = await SavingsGoal.find().sort({ createdAt: -1 }).limit(20);

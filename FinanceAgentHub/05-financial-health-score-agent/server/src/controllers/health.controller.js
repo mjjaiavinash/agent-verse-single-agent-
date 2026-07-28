@@ -1,4 +1,4 @@
-import { healthService } from '../services/health.service.js';
+import { financialHealthScoreAgent } from '../agents/FinancialHealthScoreAgent.js';
 import { HealthScore } from '../models/HealthScore.js';
 import { getDBStatus } from '../config/db.config.js';
 import { inMemoryHealthScores } from '../utils/memoryStore.util.js';
@@ -8,9 +8,9 @@ export const calculateHealthScore = async (req, res, next) => {
   try {
     const { monthlyIncome, monthlyExpenses, totalDebt, totalSavings, totalInvestments } = req.body;
 
-    logger.info(`[Financial Health Score] Evaluating health for Income: $${monthlyIncome}`);
+    logger.info(`[Health Score Controller] Delegating analysis to FinancialHealthScoreAgent`);
 
-    const healthOutput = await healthService.calculateHealthScore({
+    const agentResult = await financialHealthScoreAgent.execute({
       monthlyIncome,
       monthlyExpenses,
       totalDebt,
@@ -24,18 +24,17 @@ export const calculateHealthScore = async (req, res, next) => {
       totalDebt,
       totalSavings,
       totalInvestments,
-      score: healthOutput.score,
-      grade: healthOutput.grade,
-      riskLevel: healthOutput.riskLevel,
-      subScores: healthOutput.subScores,
-      strengths: healthOutput.strengths,
-      weaknesses: healthOutput.weaknesses,
-      improvementPlan: healthOutput.improvementPlan,
+      score: agentResult.score,
+      grade: agentResult.grade,
+      riskLevel: agentResult.riskLevel,
+      subScores: agentResult.subScores,
+      strengths: agentResult.strengths,
+      weaknesses: agentResult.weaknesses,
+      improvementPlan: agentResult.improvementPlan,
       createdAt: new Date(),
     };
 
     let savedRecord = null;
-
     if (getDBStatus()) {
       try {
         savedRecord = await HealthScore.create(payload);
@@ -45,10 +44,7 @@ export const calculateHealthScore = async (req, res, next) => {
     }
 
     if (!savedRecord) {
-      savedRecord = {
-        _id: 'mem_health_' + Date.now(),
-        ...payload,
-      };
+      savedRecord = { _id: 'mem_' + Date.now(), ...payload };
       inMemoryHealthScores.unshift(savedRecord);
     }
 
@@ -76,7 +72,6 @@ export const calculateHealthScore = async (req, res, next) => {
 export const getHistory = async (req, res, next) => {
   try {
     let history = [];
-
     if (getDBStatus()) {
       try {
         history = await HealthScore.find().sort({ createdAt: -1 }).limit(20);

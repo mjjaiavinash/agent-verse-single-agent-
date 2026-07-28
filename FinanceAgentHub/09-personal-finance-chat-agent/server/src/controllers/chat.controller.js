@@ -1,4 +1,4 @@
-import { chatService } from '../services/chat.service.js';
+import { personalFinanceChatAgent } from '../agents/PersonalFinanceChatAgent.js';
 import { ChatMessage } from '../models/ChatMessage.js';
 import { getDBStatus } from '../config/db.config.js';
 import { inMemoryChat } from '../utils/memoryStore.util.js';
@@ -8,9 +8,8 @@ export const sendMessage = async (req, res, next) => {
   try {
     const { message, sessionId = 'session_default' } = req.body;
 
-    logger.info(`[Personal Finance Chat] Received user message in session "${sessionId}"`);
+    logger.info(`[Personal Finance Chat Controller] Delegating message to PersonalFinanceChatAgent`);
 
-    // 1. Fetch recent history for context
     let history = [];
     if (getDBStatus()) {
       try {
@@ -22,10 +21,9 @@ export const sendMessage = async (req, res, next) => {
       history = inMemoryChat;
     }
 
-    // 2. Generate Assistant Response
-    const botResponse = await chatService.processChatMessage({ message, history });
+    // Execute Agent
+    const botResponse = await personalFinanceChatAgent.execute({ message, history });
 
-    // 3. Save User & Assistant Messages
     const userPayload = { sender: 'user', message, sessionId, createdAt: new Date() };
     const botPayload = { sender: 'assistant', message: botResponse, sessionId, createdAt: new Date() };
 
@@ -59,7 +57,6 @@ export const sendMessage = async (req, res, next) => {
 export const getChatHistory = async (req, res, next) => {
   try {
     let history = [];
-
     if (getDBStatus()) {
       try {
         history = await ChatMessage.find().sort({ createdAt: 1 }).limit(50);

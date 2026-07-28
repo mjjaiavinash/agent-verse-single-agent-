@@ -1,4 +1,4 @@
-import { reportService } from '../services/report.service.js';
+import { aiFinancialReportAgent } from '../agents/AIFinancialReportAgent.js';
 import { FinancialReport } from '../models/FinancialReport.js';
 import { getDBStatus } from '../config/db.config.js';
 import { inMemoryReports } from '../utils/memoryStore.util.js';
@@ -8,9 +8,9 @@ export const generateReport = async (req, res, next) => {
   try {
     const { reportMonth, monthlyIncome, monthlyExpenses, fixedCosts } = req.body;
 
-    logger.info(`[AI Financial Report] Generating report for period: "${reportMonth}"`);
+    logger.info(`[AI Financial Report Controller] Delegating synthesis to AIFinancialReportAgent`);
 
-    const reportOutput = await reportService.generateReport({
+    const agentResult = await aiFinancialReportAgent.execute({
       reportMonth,
       monthlyIncome,
       monthlyExpenses,
@@ -18,19 +18,18 @@ export const generateReport = async (req, res, next) => {
     });
 
     const payload = {
-      reportMonth: reportOutput.reportMonth || reportMonth,
+      reportMonth: agentResult.reportMonth || reportMonth,
       monthlyIncome,
       monthlyExpenses,
-      executiveSummary: reportOutput.executiveSummary,
-      incomeSummary: reportOutput.incomeSummary,
-      expenseSummary: reportOutput.expenseSummary,
-      savingsSummary: reportOutput.savingsSummary,
-      recommendations: reportOutput.recommendations,
+      executiveSummary: agentResult.executiveSummary,
+      incomeSummary: agentResult.incomeSummary,
+      expenseSummary: agentResult.expenseSummary,
+      savingsSummary: agentResult.savingsSummary,
+      recommendations: agentResult.recommendations,
       createdAt: new Date(),
     };
 
     let savedRecord = null;
-
     if (getDBStatus()) {
       try {
         savedRecord = await FinancialReport.create(payload);
@@ -40,10 +39,7 @@ export const generateReport = async (req, res, next) => {
     }
 
     if (!savedRecord) {
-      savedRecord = {
-        _id: 'mem_report_' + Date.now(),
-        ...payload,
-      };
+      savedRecord = { _id: 'mem_' + Date.now(), ...payload };
       inMemoryReports.unshift(savedRecord);
     }
 
@@ -70,7 +66,6 @@ export const generateReport = async (req, res, next) => {
 export const getHistory = async (req, res, next) => {
   try {
     let history = [];
-
     if (getDBStatus()) {
       try {
         history = await FinancialReport.find().sort({ createdAt: -1 }).limit(20);

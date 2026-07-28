@@ -1,4 +1,4 @@
-import { predictionService } from '../services/prediction.service.js';
+import { spendingPredictionAgent } from '../agents/SpendingPredictionAgent.js';
 import { SpendingPrediction } from '../models/SpendingPrediction.js';
 import { getDBStatus } from '../config/db.config.js';
 import { inMemoryPredictions } from '../utils/memoryStore.util.js';
@@ -6,31 +6,26 @@ import { logger } from '../utils/logger.util.js';
 
 export const generatePrediction = async (req, res, next) => {
   try {
-    const { monthlyIncome, recentMonthlyAvg, historicalMonths } = req.body;
+    const { monthlyIncome, recentMonthlyAvg } = req.body;
 
-    logger.info(`[Spending Prediction] Forecasting for Income: $${monthlyIncome}, Avg: $${recentMonthlyAvg}`);
+    logger.info(`[Spending Prediction Controller] Delegating analysis to SpendingPredictionAgent`);
 
-    const predictionOutput = await predictionService.generatePrediction({
-      monthlyIncome,
-      recentMonthlyAvg,
-      historicalMonths
-    });
+    const agentResult = await spendingPredictionAgent.execute({ monthlyIncome, recentMonthlyAvg });
 
     const payload = {
       monthlyIncome,
       recentMonthlyAvg,
-      predictedNextMonthSpending: predictionOutput.predictedNextMonthSpending,
-      confidenceScore: predictionOutput.confidenceScore,
-      expectedMonthlySavings: predictionOutput.expectedMonthlySavings,
-      expectedAnnualSavings: predictionOutput.expectedAnnualSavings,
-      financialRiskLevel: predictionOutput.financialRiskLevel,
-      futureTrends: predictionOutput.futureTrends,
-      riskFactors: predictionOutput.riskFactors,
+      predictedNextMonthSpending: agentResult.predictedNextMonthSpending,
+      confidenceScore: agentResult.confidenceScore,
+      expectedMonthlySavings: agentResult.expectedMonthlySavings,
+      expectedAnnualSavings: agentResult.expectedAnnualSavings,
+      financialRiskLevel: agentResult.financialRiskLevel,
+      futureTrends: agentResult.futureTrends,
+      riskFactors: agentResult.riskFactors,
       createdAt: new Date(),
     };
 
     let savedRecord = null;
-
     if (getDBStatus()) {
       try {
         savedRecord = await SpendingPrediction.create(payload);
@@ -40,10 +35,7 @@ export const generatePrediction = async (req, res, next) => {
     }
 
     if (!savedRecord) {
-      savedRecord = {
-        _id: 'mem_prediction_' + Date.now(),
-        ...payload,
-      };
+      savedRecord = { _id: 'mem_' + Date.now(), ...payload };
       inMemoryPredictions.unshift(savedRecord);
     }
 
@@ -71,7 +63,6 @@ export const generatePrediction = async (req, res, next) => {
 export const getHistory = async (req, res, next) => {
   try {
     let history = [];
-
     if (getDBStatus()) {
       try {
         history = await SpendingPrediction.find().sort({ createdAt: -1 }).limit(20);
