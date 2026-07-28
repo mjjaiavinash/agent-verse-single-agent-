@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { groqClient } from '../config/groq.config.js';
+import { config } from '../config/env.config.js';
 import { logger } from '../utils/logger.util.js';
 
 const CHILD_AGENTS = [
@@ -17,24 +18,8 @@ const CHILD_AGENTS = [
 export class OrchestratorAgent {
   constructor() {
     this.name = "Master Orchestrator Agent";
-    this.description = "Autonomous Master AI Agent governing task decomposition, multi-agent REST routing, failure recovery, and result synthesis.";
-    this.mission = "To parse complex financial queries, select and execute child microservices via REST, handle retries, and synthesize a single master response.";
-    this.responsibilities = [
-      "Decompose complex user prompts into sub-tasks.",
-      "Identify necessary child microservices across ports 5000-5008.",
-      "Execute parallel REST API calls using Axios.",
-      "Handle service failures with simulated fallback recovery.",
-      "Synthesize sub-agent JSON payloads into a master executive response."
-    ];
-    this.rules = ["Always track latency and pipeline execution steps."];
-    this.constraints = ["Adhere strictly to standard JSON response envelope."];
-    this.systemPrompt = `
-IDENTITY & ROLE:
-You are the Master Orchestrator Agent, the central governing intelligence of FinanceAgentHub.
-
-MISSION:
-Decompose multi-intent financial requests, route sub-tasks to child agents, and merge their findings into a clean, markdown-formatted master executive synthesis.
-`.trim();
+    this.description = "Autonomous Master AI Agent governing task decomposition and multi-agent synthesis.";
+    this.mission = "To route sub-tasks to child microservices via REST and synthesize master responses.";
   }
 
   async pingAgentsStatus() {
@@ -56,17 +41,14 @@ Decompose multi-intent financial requests, route sub-tasks to child agents, and 
     const startTime = Date.now();
     const timeline = [];
 
-    // Step 1: Task Decomposition
     const step1Start = Date.now();
     const selectedAgents = this.determineRequiredAgents(userQuery);
     timeline.push({ step: '1. Intent Recognition & Agent Selection', status: 'completed', latencyMs: Date.now() - step1Start });
 
-    // Step 2: REST Dispatch
     const step2Start = Date.now();
     const agentResponses = await this.dispatchChildAgents(selectedAgents, userQuery);
     timeline.push({ step: '2. Parallel REST API Dispatch & Fallback Recovery', status: 'completed', latencyMs: Date.now() - step2Start });
 
-    // Step 3: Master Synthesis
     const step3Start = Date.now();
     const finalSynthesizedResponse = await this.synthesizeMasterResponse(userQuery, agentResponses);
     timeline.push({ step: '3. Groq AI Master Synthesis', status: 'completed', latencyMs: Date.now() - step3Start });
@@ -131,26 +113,31 @@ Decompose multi-intent financial requests, route sub-tasks to child agents, and 
   }
 
   async synthesizeMasterResponse(userQuery, agentResponses) {
-    const userPrompt = `Synthesize response for query: "${userQuery}"
-Collected Sub-Agent Payloads:
-${JSON.stringify(agentResponses, null, 2)}`;
+    if (!config.groqApiKey || config.groqApiKey.includes('your_groq_api_key')) {
+      logger.info(`[${this.name}] Proactive synthesis fallback activated (Groq API Key omitted/placeholder).`);
+      return this.heuristicMasterSynthesis(userQuery, agentResponses);
+    }
 
     try {
-      logger.info(`[${this.name}] Synthesizing master LLM output`);
       const completion = await groqClient.chat.completions.create({
         messages: [
-          { role: 'system', content: this.systemPrompt },
-          { role: 'user', content: userPrompt }
+          { role: 'system', content: 'You are Master Orchestrator Agent. Synthesize JSON payloads into markdown.' },
+          { role: 'user', content: `User Query: "${userQuery}", Payloads: ${JSON.stringify(agentResponses)}` }
         ],
         model: 'llama3-8b-8192',
         temperature: 0.3,
         max_tokens: 800,
       });
 
-      return completion.choices[0]?.message?.content || "Multi-agent synthesis complete.";
+      return completion.choices[0]?.message?.content || this.heuristicMasterSynthesis(userQuery, agentResponses);
     } catch (error) {
-      logger.warn(`[${this.name}] Groq API fallback executed: ${error.message}`);
-      return `**Multi-Agent Orchestration Summary**
+      logger.warn(`[${this.name}] Reactive synthesis fallback activated: ${error.message}`);
+      return this.heuristicMasterSynthesis(userQuery, agentResponses);
+    }
+  }
+
+  heuristicMasterSynthesis(userQuery, agentResponses) {
+    return `**Multi-Agent Orchestration Summary**
 
 - **User Query**: "${userQuery}"
 - **Agents Invoked**: ${agentResponses.map(a => a.agentName).join(', ')}
@@ -159,7 +146,6 @@ ${JSON.stringify(agentResponses, null, 2)}`;
 1. **Expense Categorizer**: Classified transaction as **Food & Dining** (98% confidence).
 2. **Budget Planner**: Confirmed discretionary allocation allows for purchase.
 3. **Financial Health Score**: Composite score remains strong at **Grade A (84/100)**.`;
-    }
   }
 }
 

@@ -1,64 +1,32 @@
 import { groqClient } from '../config/groq.config.js';
+import { config } from '../config/env.config.js';
 import { logger } from '../utils/logger.util.js';
 
 export class SpendingPredictionAgent {
   constructor() {
     this.name = "Spending Prediction Agent";
-    this.description = "Autonomous AI Agent specialized in predictive temporal cash flow forecasting and risk scoring.";
-    this.mission = "To predict next month spending, 3-month future trends, confidence meters, and financial risk profiles.";
-    this.responsibilities = [
-      "Evaluate historical cash flow averages.",
-      "Predict next month outflow and confidence score.",
-      "Calculate 3-month future trend trajectories.",
-      "Identify seasonal liquidity risk factors."
-    ];
-    this.rules = ["Always return output strictly as a JSON object."];
-    this.constraints = ["Adhere strictly to expected JSON structure."];
-    this.systemPrompt = `
-IDENTITY & ROLE:
-You are the Spending Prediction Agent, an autonomous AI predictive temporal modeler.
-
-MISSION:
-Forecast next month spending, confidence score, expected savings, risk level, 3-month future trends, and risk factors.
-
-EXPECTED JSON OUTPUT FORMAT:
-{
-  "predictedNextMonthSpending": 4120.00,
-  "confidenceScore": 0.94,
-  "expectedMonthlySavings": 1380.00,
-  "expectedAnnualSavings": 16560.00,
-  "financialRiskLevel": "Low",
-  "futureTrends": [
-    { "month": "Month +1", "projectedSpending": 4120, "projectedSavings": 1380, "trajectory": "Stable" }
-  ],
-  "riskFactors": [
-    "Risk factor 1..."
-  ]
-}
-`.trim();
+    this.description = "Autonomous AI Agent specialized in predictive cash flow forecasting.";
+    this.mission = "To predict next month spending, confidence score, and 3-month trends.";
   }
 
   async execute({ monthlyIncome, recentMonthlyAvg }) {
-    const userPrompt = `Predict future spending:
-Monthly Income: $${monthlyIncome}
-Recent 3-Month Average Spend: $${recentMonthlyAvg}`;
+    if (!config.groqApiKey || config.groqApiKey.includes('your_groq_api_key')) {
+      logger.info(`[${this.name}] Proactive fallback activated (Groq API Key omitted/placeholder).`);
+      return this.heuristicFallback({ monthlyIncome, recentMonthlyAvg });
+    }
 
     try {
-      logger.info(`[${this.name}] Executing spending prediction`);
       const completion = await groqClient.chat.completions.create({
         messages: [
-          { role: 'system', content: this.systemPrompt },
-          { role: 'user', content: userPrompt }
+          { role: 'system', content: 'You are Spending Prediction Agent. Return JSON.' },
+          { role: 'user', content: `Income: $${monthlyIncome}, Avg: $${recentMonthlyAvg}` }
         ],
         model: 'llama3-8b-8192',
-        temperature: 0.2,
-        max_tokens: 1000,
         response_format: { type: 'json_object' }
       });
-
       return JSON.parse(completion.choices[0]?.message?.content);
     } catch (error) {
-      logger.warn(`[${this.name}] Groq API fallback executed: ${error.message}`);
+      logger.warn(`[${this.name}] Reactive fallback activated: ${error.message}`);
       return this.heuristicFallback({ monthlyIncome, recentMonthlyAvg });
     }
   }

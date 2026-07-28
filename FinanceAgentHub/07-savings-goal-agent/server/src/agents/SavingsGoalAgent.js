@@ -1,40 +1,12 @@
 import { groqClient } from '../config/groq.config.js';
+import { config } from '../config/env.config.js';
 import { logger } from '../utils/logger.util.js';
 
 export class SavingsGoalAgent {
   constructor() {
     this.name = "Savings Goal Agent";
-    this.description = "Autonomous AI Agent specialized in target savings goal tracking, completion ETA calculation, and milestone acceleration.";
-    this.mission = "To track target goal milestones, calculate completion timelines, and recommend Groq AI acceleration strategies.";
-    this.responsibilities = [
-      "Calculate percentage completion progress.",
-      "Determine projected completion ETA date.",
-      "Define 50%, 75%, and 100% milestone targets.",
-      "Synthesize goal acceleration suggestions."
-    ];
-    this.rules = ["Always return output strictly as a JSON object."];
-    this.constraints = ["Adhere strictly to expected JSON structure."];
-    this.systemPrompt = `
-IDENTITY & ROLE:
-You are the Savings Goal Agent, an autonomous AI goal acceleration strategist.
-
-MISSION:
-Calculate goal progress percentage, remaining balance, completion ETA date, milestones, and acceleration tips.
-
-EXPECTED JSON OUTPUT FORMAT:
-{
-  "progressPercentage": 42.5,
-  "remainingAmount": 11500.00,
-  "monthsToCompletion": 23,
-  "completionDate": "June 2028",
-  "milestones": [
-    { "milestone": "50% Target", "targetDate": "September 2026", "status": "Upcoming" }
-  ],
-  "suggestions": [
-    "Suggestion 1..."
-  ]
-}
-`.trim();
+    this.description = "Autonomous AI Agent specialized in savings goal tracking and ETA calculation.";
+    this.mission = "To track milestones, projected completion dates, and acceleration tips.";
   }
 
   async execute({ goalName, targetAmount, currentSavings, monthlyContribution }) {
@@ -46,30 +18,24 @@ EXPECTED JSON OUTPUT FORMAT:
     targetDateObj.setMonth(targetDateObj.getMonth() + months);
     const completionDateStr = targetDateObj.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
-    const userPrompt = `Analyze savings goal:
-Goal Name: "${goalName}"
-Target Amount: $${targetAmount}
-Current Savings: $${currentSavings} (Progress: ${progress}%)
-Monthly Contribution: $${monthlyContribution}
-Calculated Months: ${months} (ETA: ${completionDateStr})`;
+    if (!config.groqApiKey || config.groqApiKey.includes('your_groq_api_key')) {
+      logger.info(`[${this.name}] Proactive fallback activated (Groq API Key omitted/placeholder).`);
+      return this.heuristicFallback({ targetAmount, currentSavings, monthlyContribution, remaining, progress, months, completionDateStr });
+    }
 
     try {
-      logger.info(`[${this.name}] Executing goal analysis for "${goalName}"`);
       const completion = await groqClient.chat.completions.create({
         messages: [
-          { role: 'system', content: this.systemPrompt },
-          { role: 'user', content: userPrompt }
+          { role: 'system', content: 'You are Savings Goal Agent. Return JSON.' },
+          { role: 'user', content: `Goal: "${goalName}", Target: $${targetAmount}, Current: $${currentSavings}, Contrib: $${monthlyContribution}` }
         ],
         model: 'llama3-8b-8192',
-        temperature: 0.2,
-        max_tokens: 1000,
         response_format: { type: 'json_object' }
       });
-
       return JSON.parse(completion.choices[0]?.message?.content);
     } catch (error) {
-      logger.warn(`[${this.name}] Groq API fallback executed: ${error.message}`);
-      return this.heuristicFallback({ goalName, targetAmount, currentSavings, monthlyContribution, remaining, progress, months, completionDateStr });
+      logger.warn(`[${this.name}] Reactive fallback activated: ${error.message}`);
+      return this.heuristicFallback({ targetAmount, currentSavings, monthlyContribution, remaining, progress, months, completionDateStr });
     }
   }
 
@@ -88,7 +54,7 @@ Calculated Months: ${months} (ETA: ${completionDateStr})`;
       ],
       suggestions: [
         `Increasing monthly contribution to $${boostContrib}/mo will shorten completion ETA by ${Math.round(months * 0.25)} months.`,
-        'Deposit tax refunds or annual bonuses directly to accelerate milestones.',
+        'Deposit tax refunds directly to accelerate milestones.',
         'Keep goal funds in a 4.5%+ APY High-Yield Savings Account.'
       ]
     };

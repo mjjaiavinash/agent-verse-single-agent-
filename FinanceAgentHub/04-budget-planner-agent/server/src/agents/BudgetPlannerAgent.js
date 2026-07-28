@@ -1,66 +1,32 @@
 import { groqClient } from '../config/groq.config.js';
+import { config } from '../config/env.config.js';
 import { logger } from '../utils/logger.util.js';
 
 export class BudgetPlannerAgent {
   constructor() {
     this.name = "Budget Planner Agent";
-    this.description = "Autonomous AI Agent specialized in 50/30/20 category budget planning, allocation optimization, and spending caps.";
-    this.mission = "To generate structured monthly budgets, category spending limits, and financial recommendations.";
-    this.responsibilities = [
-      "Evaluate monthly income and expense inputs.",
-      "Calculate 50/30/20 budget allocations (Needs, Wants, Savings).",
-      "Set spending caps per major expense category.",
-      "Synthesize budget optimization recommendations."
-    ];
-    this.rules = ["Always return output strictly as a JSON object."];
-    this.constraints = ["Adhere strictly to expected JSON structure."];
-    this.systemPrompt = `
-IDENTITY & ROLE:
-You are the Budget Planner Agent, an autonomous AI budgeting strategist.
-
-MISSION:
-Calculate 50/30/20 budget allocations, category spending limits, and recommendations.
-
-EXPECTED JSON OUTPUT FORMAT:
-{
-  "budgetAllocation": {
-    "needs": { "amount": 2500, "percentage": 50 },
-    "wants": { "amount": 1500, "percentage": 30 },
-    "savings": { "amount": 1000, "percentage": 20 }
-  },
-  "categoryBudgets": [
-    { "category": "Housing & Utilities", "allocatedAmount": 1500, "limit": 1600 },
-    { "category": "Food & Dining", "allocatedAmount": 600, "limit": 650 }
-  ],
-  "recommendations": [
-    "Recommendation 1...",
-    "Recommendation 2..."
-  ]
-}
-`.trim();
+    this.description = "Autonomous AI Agent specialized in 50/30/20 category budget planning.";
+    this.mission = "To generate 50/30/20 budget allocations and category spending limits.";
   }
 
   async execute({ monthlyIncome, monthlyExpenses }) {
-    const userPrompt = `Generate 50/30/20 budget for:
-Monthly Income: $${monthlyIncome}
-Monthly Expenses: $${monthlyExpenses}`;
+    if (!config.groqApiKey || config.groqApiKey.includes('your_groq_api_key')) {
+      logger.info(`[${this.name}] Proactive fallback activated (Groq API Key omitted/placeholder).`);
+      return this.heuristicFallback({ monthlyIncome, monthlyExpenses });
+    }
 
     try {
-      logger.info(`[${this.name}] Executing budget allocation`);
       const completion = await groqClient.chat.completions.create({
         messages: [
-          { role: 'system', content: this.systemPrompt },
-          { role: 'user', content: userPrompt }
+          { role: 'system', content: 'You are Budget Planner Agent. Return JSON.' },
+          { role: 'user', content: `Income: $${monthlyIncome}, Expenses: $${monthlyExpenses}` }
         ],
         model: 'llama3-8b-8192',
-        temperature: 0.2,
-        max_tokens: 1000,
         response_format: { type: 'json_object' }
       });
-
       return JSON.parse(completion.choices[0]?.message?.content);
     } catch (error) {
-      logger.warn(`[${this.name}] Groq API fallback executed: ${error.message}`);
+      logger.warn(`[${this.name}] Reactive fallback activated: ${error.message}`);
       return this.heuristicFallback({ monthlyIncome, monthlyExpenses });
     }
   }

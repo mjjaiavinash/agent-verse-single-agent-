@@ -1,75 +1,32 @@
 import { groqClient } from '../config/groq.config.js';
+import { config } from '../config/env.config.js';
 import { logger } from '../utils/logger.util.js';
 
 export class SpendingPatternAnalyzerAgent {
   constructor() {
     this.name = "Spending Pattern Analyzer Agent";
-    this.description = "Autonomous AI Agent specialized in spending habit analytics, behavioral trends, and heatmap calculations.";
-    this.mission = "To analyze historical spending patterns, identify top spending categories, and calculate weekly/monthly cash flow velocity.";
-    this.responsibilities = [
-      "Evaluate financial transaction histories.",
-      "Calculate top spending category distributions and percentage weights.",
-      "Extract weekly and monthly trajectory trends.",
-      "Synthesize actionable AI insights regarding cash flow habits."
-    ];
-    this.rules = [
-      "Always return output strictly as a JSON object.",
-      "Ensure percentage distributions sum to 100%."
-    ];
-    this.constraints = [
-      "Must adhere strictly to expected JSON structure."
-    ];
-    this.systemPrompt = `
-IDENTITY & ROLE:
-You are the Spending Pattern Analyzer Agent, an autonomous AI financial analytics agent.
-
-MISSION:
-Analyze historical spending items, extract top categories, weekly/monthly velocity trends, and generate strategic insights.
-
-EXPECTED JSON OUTPUT FORMAT:
-{
-  "topCategories": [
-    { "category": "Housing", "amount": 1800, "percentage": 45 },
-    { "category": "Food & Dining", "amount": 950, "percentage": 24 }
-  ],
-  "weeklyTrends": [
-    { "week": "Week 1", "amount": 1050 },
-    { "week": "Week 2", "amount": 950 }
-  ],
-  "monthlyTrends": [
-    { "month": "May", "amount": 4100 },
-    { "month": "June", "amount": 3950 }
-  ],
-  "aiInsights": [
-    "Insight 1...",
-    "Insight 2..."
-  ]
-}
-`.trim();
+    this.description = "Autonomous AI Agent specialized in spending habit analytics and behavioral trends.";
+    this.mission = "To analyze historical spending patterns and calculate cash flow velocity.";
   }
 
   async execute({ monthlyIncome, totalExpenses, transactions = [] }) {
-    const userPrompt = `Analyze these spending metrics:
-Monthly Income: $${monthlyIncome}
-Total Monthly Expenses: $${totalExpenses}
-Transaction Items: ${JSON.stringify(transactions)}`;
+    if (!config.groqApiKey || config.groqApiKey.includes('your_groq_api_key')) {
+      logger.info(`[${this.name}] Proactive fallback activated (Groq API Key omitted/placeholder).`);
+      return this.heuristicFallback({ monthlyIncome, totalExpenses });
+    }
 
     try {
-      logger.info(`[${this.name}] Executing pattern analysis`);
       const completion = await groqClient.chat.completions.create({
         messages: [
-          { role: 'system', content: this.systemPrompt },
-          { role: 'user', content: userPrompt }
+          { role: 'system', content: 'You are Spending Pattern Analyzer Agent. Return JSON.' },
+          { role: 'user', content: `Analyze: Income $${monthlyIncome}, Expenses $${totalExpenses}` }
         ],
         model: 'llama3-8b-8192',
-        temperature: 0.2,
-        max_tokens: 1000,
         response_format: { type: 'json_object' }
       });
-
       return JSON.parse(completion.choices[0]?.message?.content);
     } catch (error) {
-      logger.warn(`[${this.name}] Groq API fallback executed: ${error.message}`);
+      logger.warn(`[${this.name}] Reactive fallback activated: ${error.message}`);
       return this.heuristicFallback({ monthlyIncome, totalExpenses });
     }
   }
@@ -78,11 +35,10 @@ Transaction Items: ${JSON.stringify(transactions)}`;
     const housing = Math.round(totalExpenses * 0.45);
     const food = Math.round(totalExpenses * 0.25);
     const transport = Math.round(totalExpenses * 0.15);
-    const util = Math.round(totalExpenses * 0.15);
 
     return {
       topCategories: [
-        { category: "Housing & Utilities", amount: housing + util, percentage: 60 },
+        { category: "Housing & Utilities", amount: housing, percentage: 45 },
         { category: "Food & Dining", amount: food, percentage: 25 },
         { category: "Transportation", amount: transport, percentage: 15 }
       ],
@@ -98,8 +54,8 @@ Transaction Items: ${JSON.stringify(transactions)}`;
         { month: "July", amount: totalExpenses }
       ],
       aiInsights: [
-        `Housing & Utilities represent your largest cash outflow (${Math.round(((housing+util)/totalExpenses)*100)}% of expenses).`,
-        `Your average weekly burn rate is $${Math.round(totalExpenses / 4)}/week.`
+        `Housing & Utilities represent your largest cash outflow (${Math.round((housing/totalExpenses)*100)}% of total burn).`,
+        `Average weekly burn rate is currently $${Math.round(totalExpenses / 4)}/week.`
       ]
     };
   }
