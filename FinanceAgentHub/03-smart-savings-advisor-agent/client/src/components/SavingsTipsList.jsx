@@ -24,7 +24,7 @@ export default function SavingsTipsList({ tips = [] }) {
                 <h4 className="font-bold text-slate-100 text-sm leading-snug">{tip.title}</h4>
                 {tip.potentialSavings && (
                   <span className="px-2 py-0.5 rounded-md bg-emerald-950/80 border border-emerald-500/30 text-emerald-400 font-mono text-xs shrink-0 ml-2">
-                    +`₹${{tip.potentialSavings}/mo`}
+                    +{`₹${tip.potentialSavings}/mo`}
                   </span>
                 )}
               </div>

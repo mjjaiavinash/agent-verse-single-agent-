@@ -16,7 +16,7 @@ export default function FinancialSummaries({ result }) {
             <span>Income Summary</span>
           </span>
           <span className="text-xs font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-500/30 font-bold">
-            `₹${{Number(incomeSummary?.totalIncome || 0).toLocaleString()}`}
+            {`₹${Number(incomeSummary?.totalIncome || 0).toLocaleString()}`}
           </span>
         </div>
 
@@ -40,18 +40,18 @@ export default function FinancialSummaries({ result }) {
             <span>Expense Summary</span>
           </span>
           <span className="text-xs font-mono text-rose-400 bg-rose-950/60 px-2 py-0.5 rounded border border-rose-500/30 font-bold">
-            `₹${{Number(expenseSummary?.totalExpenses || 0).toLocaleString()}`}
+            {`₹${Number(expenseSummary?.totalExpenses || 0).toLocaleString()}`}
           </span>
         </div>
 
         <div className="space-y-1 text-xs">
           <div className="flex justify-between text-slate-400">
             <span>Fixed Obligations</span>
-            <span className="text-slate-200 font-mono font-medium">`₹${{Number(expenseSummary?.fixedExpenses || 0).toLocaleString()}`}</span>
+            <span className="text-slate-200 font-mono font-medium">{`₹${Number(expenseSummary?.fixedExpenses || 0).toLocaleString()}`}</span>
           </div>
           <div className="flex justify-between text-slate-400">
             <span>Discretionary Spend</span>
-            <span className="text-slate-200 font-mono font-medium">`₹${{Number(expenseSummary?.discretionaryExpenses || 0).toLocaleString()}`}</span>
+            <span className="text-slate-200 font-mono font-medium">{`₹${Number(expenseSummary?.discretionaryExpenses || 0).toLocaleString()}`}</span>
           </div>
         </div>
       </div>
@@ -64,18 +64,18 @@ export default function FinancialSummaries({ result }) {
             <span>Savings Summary</span>
           </span>
           <span className="text-xs font-mono text-cyan-400 bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30 font-bold">
-            `₹${{Number(savingsSummary?.netSavings || 0).toLocaleString()}`}
+            {`₹${Number(savingsSummary?.netSavings || 0).toLocaleString()}`}
           </span>
         </div>
 
         <div className="space-y-1 text-xs">
           <div className="flex justify-between text-slate-400">
             <span>Net Savings Rate</span>
-            <span className="text-cyan-400 font-mono font-bold">{`₹{savingsSummary?.savingsRate || 0}%`}</span>
+            <span className="text-cyan-400 font-mono font-bold">{`${savingsSummary?.savingsRate || 0}%`}</span>
           </div>
           <div className="flex justify-between text-slate-400">
             <span>Liquid Buffer</span>
-            <span className="text-slate-200 font-mono font-medium">{`₹{savingsSummary?.monthsOfBuffer || 4.5} Months`}</span>
+            <span className="text-slate-200 font-mono font-medium">{`${savingsSummary?.monthsOfBuffer || 4.5} Months`}</span>
           </div>
         </div>
       </div>
