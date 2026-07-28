@@ -12,9 +12,12 @@ export const analyzeSpendingPatterns = async (req, res, next) => {
 
     const agentResult = await spendingPatternAnalyzerAgent.execute({ monthlyIncome, totalExpenses, transactions });
 
+    const computedTotalSpent = totalExpenses || (transactions && transactions.length > 0 ? transactions.reduce((acc, t) => acc + (Number(t.amount) || 0), 0) : 35000);
+
     const payload = {
-      monthlyIncome,
-      totalExpenses,
+      monthlyIncome: monthlyIncome || 75000,
+      totalExpenses: computedTotalSpent,
+      totalSpent: computedTotalSpent,
       topCategories: agentResult.topCategories,
       weeklyTrends: agentResult.weeklyTrends,
       monthlyTrends: agentResult.monthlyTrends,
@@ -41,6 +44,7 @@ export const analyzeSpendingPatterns = async (req, res, next) => {
       status: "success",
       result: {
         id: savedRecord._id,
+        totalSpent: savedRecord.totalSpent,
         topCategories: savedRecord.topCategories,
         weeklyTrends: savedRecord.weeklyTrends,
         monthlyTrends: savedRecord.monthlyTrends,
