@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+*/node_modules/
+*/*/node_modules/
+
+# Production builds
+dist/
+*/dist/
+*/*/dist/
+
+# Environment variables
+.env
+*/.env
+*/*/.env
+
+# Logs
+*.log

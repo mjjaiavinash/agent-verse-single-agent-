@@ -1,0 +1,13 @@
+{
+  "name": "finance-agent-hub",
+  "version": "1.0.0",
+  "description": "Distributed Multi-Agent AI System for Financial Analytics & Management",
+  "private": true,
+  "scripts": {
+    "start:all": "concurrently \"npm run start --workspaces\"",
+    "dev:all": "concurrently \"npm run dev --workspaces\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
