@@ -21,7 +21,7 @@ export default function SpendingLimits({ spendingLimits = [] }) {
           <div key={idx} className="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1 text-center">
             <div className="text-xs text-slate-400 font-medium">{limit.period}</div>
             <div className="text-2xl font-bold text-amber-400 font-mono">
-              ${`₹{Number(limit.limit).toFixed(2)}`}
+              `₹${{Number(limit.limit).toFixed(2)}`}
             </div>
           </div>
         ))}

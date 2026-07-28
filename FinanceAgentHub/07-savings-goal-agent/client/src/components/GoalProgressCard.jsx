@@ -40,8 +40,8 @@ export default function GoalProgressCard({ result }) {
         </div>
 
         <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
-          <span>Saved: ${`₹{Number(currentSavings).toLocaleString()}`}</span>
-          <span>Target: ${`₹{Number(targetAmount).toLocaleString()}`}</span>
+          <span>Saved: `₹${{Number(currentSavings).toLocaleString()}`}</span>
+          <span>Target: `₹${{Number(targetAmount).toLocaleString()}`}</span>
         </div>
       </div>
 
@@ -53,7 +53,7 @@ export default function GoalProgressCard({ result }) {
             <span>Remaining Amount</span>
           </div>
           <div className="text-xl font-bold text-amber-400 font-mono">
-            ${`₹{Number(remainingAmount).toLocaleString()}`}
+            `₹${{Number(remainingAmount).toLocaleString()}`}
           </div>
         </div>
 

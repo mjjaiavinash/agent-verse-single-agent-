@@ -22,7 +22,7 @@ export default function TopCategories({ categories = [] }) {
             <div className="flex items-center justify-between text-xs">
               <span className="font-semibold text-slate-200">{cat.category}</span>
               <div className="flex items-center space-x-2 font-mono">
-                <span className="text-slate-400">${`₹{Number(cat.amount).toFixed(2)}`}</span>
+                <span className="text-slate-400">`₹${{Number(cat.amount).toFixed(2)}`}</span>
                 <span className="text-emerald-400 font-bold">{`₹{cat.percentage}%`}</span>
               </div>
             </div>

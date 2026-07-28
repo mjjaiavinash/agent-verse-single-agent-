@@ -33,8 +33,20 @@ export default function Dashboard() {
   };
 
   useEffect(() => {
-    // Initial default analysis run
-    handleRunAnalysis({});
+    // Initial analysis with sample Indian Rupee dataset
+    handleRunAnalysis({
+      monthlyIncome: 75000,
+      totalExpenses: 35000,
+      transactions: [
+        { expenseName: 'Starbucks Coffee', amount: 350 },
+        { expenseName: 'Grocery Supermarket', amount: 3500 },
+        { expenseName: 'Uber Commute', amount: 750 },
+        { expenseName: 'Monthly Rent', amount: 25000 },
+        { expenseName: 'Electronics Store', amount: 4200 },
+        { expenseName: 'Netflix Subscription', amount: 499 },
+        { expenseName: 'Petrol Gas Station', amount: 1200 }
+      ]
+    });
   }, []);
 
   return (
@@ -59,7 +71,7 @@ export default function Dashboard() {
           <div>
             <div className="text-xs text-slate-400 font-medium">Total Analyzed Outflow</div>
             <div className="text-3xl font-extrabold text-emerald-400 font-mono mt-1">
-              ${`₹{Number(result.totalSpent || 0).toFixed(2)}`}
+              {`₹${Number(result.totalSpent || 0).toFixed(2)}`}
             </div>
           </div>
           <div className="flex items-center space-x-3 text-xs font-mono text-slate-400 bg-slate-950 p-3 rounded-xl border border-slate-800">

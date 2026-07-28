@@ -22,7 +22,7 @@ export default function CategoryBudgets({ categoryBudgets = [] }) {
             <div className="flex items-center justify-between text-xs">
               <span className="font-semibold text-slate-200">{item.category}</span>
               <div className="flex items-center space-x-2 font-mono">
-                <span className="text-cyan-400 font-bold">${`₹{Number(item.allocated).toFixed(2)}`}</span>
+                <span className="text-cyan-400 font-bold">`₹${{Number(item.allocated).toFixed(2)}`}</span>
                 <span className="text-slate-500">({item.percentage}%)</span>
               </div>
             </div>
